@@ -21,12 +21,6 @@ app.use(cookieParser());
 
 app.use("/upload", uploadRoute);
 
-app.use("/graphql", graphqlHTTP((req, res) => ({
-    schema,
-    graphiql: true,
-    context: { req, res }  
-})))
-
 app.get('/', (req, res) => res.send('Hare Krishna'));
 
 module.exports = app;
