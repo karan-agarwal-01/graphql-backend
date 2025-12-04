@@ -9,16 +9,16 @@ const setTokenCookies = (res, _id) => {
 
   res.cookie('accessToken', accessToken, {
     httpOnly: true,
-    secure: false,
-    sameSite: "lax",
+    secure: true,
+    sameSite: "none",
     maxAge: 60 * 60 * 1000,
     path: "/",
   })
 
   res.cookie('refreshToken', refreshToken, {
     httpOnly: true,
-    secure: false,
-    sameSite: "lax",
+    secure: true,
+    sameSite: "none",
     maxAge: 7 * 24 * 60 * 60 * 1000,
     path: "/",
   });
@@ -135,8 +135,8 @@ const authResolvers = {
         const newAccessToken = generateAccessToken(user._id);
         res.cookie("accessToken", newAccessToken, {
           httpOnly: true,
-          secure: false,
-          sameSite: "lax",
+          secure: true,
+          sameSite: "none",
           maxAge: 60 * 60 * 1000,
           path: "/",
         })
@@ -151,8 +151,8 @@ const authResolvers = {
   
     logout: async (parent, args, context) => {
       const { req, res } = context;
-      res.clearCookie("accessToken", { httpOnly: true, secure: false, sameSite: "lax" });
-      res.clearCookie("refreshToken", { httpOnly: true, secure: false, sameSite: "lax" });
+      res.clearCookie("accessToken", { httpOnly: true, secure: true, sameSite: "none" });
+      res.clearCookie("refreshToken", { httpOnly: true, secure: true, sameSite: "none" });
       return "Logout successfully"
     },
   }
