@@ -5,7 +5,7 @@ const Product = require("../models/Product");
 const orderTypeDefs = `
 
     type OrderItem {
-        product: Product!
+        product: Product
         quantity: Int!
     }
 
@@ -43,14 +43,23 @@ const orderResolvers = {
 
     Query: {
         getAllOrder: async () => {
-            return await Order.find().populate("user", "fullname email address phone").populate("orderItems.product", "name image price")
+            const orders = await Order.find().populate("user", "fullname email address phone").populate("orderItems.product", "name image price")
+            return orders.map(order => ({
+                ...order._doc,
+                orderItems: order.orderItems.filter(item => item.product)
+            }));
         },
 
         getUserOrder: async (parent, args, context) => {
             const { req } = context;
             if (!req.user) throw new Error('Unauthorized')
 
-            return await Order.find({ user: req.user.id }).populate("user", "fullname email address phone").populate("orderItems.product", "name image price")
+            const orders = await Order.find({ user: req.user.id }).populate("user", "fullname email address phone").populate("orderItems.product", "name image price")
+
+            return orders.map(order => ({
+                ...order._doc,
+                orderItems: order.orderItems.filter(item => item.product)
+            }));
         }
     },
 
@@ -101,6 +110,7 @@ const orderResolvers = {
 
             if (status === "Confirmed" && order.status !== "Confirmed") {
                 for (let item of order.orderItems) {
+                    if (!item.product) continue;
                     const product = await Product.findById(item.product._id)
                     if (product.stock < item.quantity) throw new Error(`${product.name} does not have enough stock`)
                     product.stock -= item.quantity
@@ -137,6 +147,7 @@ const orderResolvers = {
             if (nonCancelable.includes(order.status)) throw new Error("Order cannot be canceled at this stage");
 
             for (let item of order.orderItems) {
+                if (!item.product) continue;
                 const product = await Product.findById(item.product._id);
                 product.stock += item.quantity;
                 await product.save();
