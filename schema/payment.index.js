@@ -39,8 +39,8 @@ const paymentResolvers = {
                 mode: 'payment',
                 payment_method_types: ["card"],
                 line_items: lineItems,
-                success_url: `http://localhost:5173/payment-success?session_id={CHECKOUT_SESSION_ID}`,
-                cancel_url: `http://localhost:5173/payment-failed`,
+                success_url: `https://graphql-frontend-lilac.vercel.app/payment-success?session_id={CHECKOUT_SESSION_ID}`,
+                cancel_url: `https://graphql-frontend-lilac.vercel.app/payment-failed`,
                 metadata: {
                     orderId: order._id.toString()
                 }
