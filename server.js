@@ -19,7 +19,7 @@ async function start() {
     app.use(auth)
 
     app.use("/graphql", graphqlHTTP((req, res) => ({
-      schema: schema,
+      schema,
       graphiql: true,
       context: { req, res }  
     })))
@@ -27,7 +27,7 @@ async function start() {
     app.listen(PORT, () => {
       console.log(`Server ready at http://localhost:${PORT}/graphql`);
     });
-    
+
   } catch (err) {
     console.error('Error connecting to DB', err);
     process.exit(1);
