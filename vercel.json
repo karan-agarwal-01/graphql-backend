@@ -1,0 +1,9 @@
+{
+    "routes": [
+        {
+        "src": "/stripe",
+        "dest": "/stripe",
+        "methods": ["POST"]
+        }
+    ]
+}
