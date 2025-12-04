@@ -18,12 +18,6 @@ async function start() {
 
     app.use(auth)
 
-    app.use("/graphql", graphqlHTTP((req, res) => ({
-      schema,
-      graphiql: true,
-      context: { req, res }  
-    })))
-
     app.listen(PORT, () => {
       console.log(`Server ready at http://localhost:${PORT}/graphql`);
     });
